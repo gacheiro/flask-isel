@@ -14,18 +14,6 @@ def about():
     return "<b>Flask Tutorial - routes and pages</b>"
 
 
-@app.route("/<page>")
-@app.route("/<page>/<subpage>")
-def dynamic_page(page, subpage=None):
-    page = page.upper()
-    subpage = subpage.upper()
-    if subpage == None:
-        return f"You are accessing page <b>{page}</b>."
-    else:
-        return (f"You are accessing page <b>{page}</b>, \
-                  subpage <b>{subpage}</b>.")
-
-
 @app.route("/num/<int:x>")
 def num(x):
     return str(x)
