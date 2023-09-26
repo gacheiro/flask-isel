@@ -47,7 +47,7 @@ Le code `tut01.py` est expliqué comme suit :
 
 2. Nous créons une instance d'application Flask nommée `app`.
 
-3. En utilisant le décorateur @app.route("/"), nous définissons une route pour l'URL racine ("/"). Lorsqu'un utilisateur visite l'URL racine de votre application web, Flask invoquera la fonction home().
+3. En utilisant le décorateur `@app.route("/")`, nous définissons une route pour l'URL racine ("/"). Lorsqu'un utilisateur visite l'URL racine de votre application web, Flask invoquera la fonction `home()`.
 
 4. À l'intérieur de la fonction `home()`, nous retournons simplement la chaîne `"Hello, world !"` en tant que réponse. Cette réponse sera renvoyée au navigateur web du client.
 
@@ -65,7 +65,7 @@ Modifiez le code ci-dessus pour créer une page "À propos" accessible à [local
 
 ##### Conseils
 
-💡 N'oubliez pas que vous pouvez utiliser des balises HTML dans la réponse sous forme de chaîne.
+💡 N'oubliez pas que vous pouvez utiliser des balises HTML dans la réponse.
 
 ## Pages statiques et dynamiques
 
@@ -95,7 +95,7 @@ Cette route, définie par `@app.route("/page")`, affiche le message : "Ceci est 
 Le code fourni est une application Flask de base qui montre comment créer des pages statiques avec Flask. Elle définit deux routes :
 
 1. La route racine ("/") associée à la fonction home, qui affiche un message statique.
-2. La route "/page" associée à la fonction static_page, qui affiche un autre message statique avec une mise en forme HTML.
+2. La route "/page" associée à la fonction `static_page`, qui affiche un autre message statique avec une mise en forme HTML.
 
 
 ### Pages dynamiques
@@ -110,17 +110,32 @@ def profil_utilisateur(id):
     return f"Ceci est la page de profil pour l'utilisateur {id}."
 ```
 
-Dans ce code, la partie `<int:id>` de la route indique que `id` est un paramètre dynamique pouvant prendre une valeur entière. Lorsqu'un utilisateur accède à une URL comme "[localhost:5000/utilisateur/1](http://localhost:5000/utilisateur/1)", le paramètre `id` est transmis à la fonction profil_utilisateur, qui affiche "Ceci est la page de profil pour l'utilisateur 1."
+Dans ce code, la partie `<int:id>` de la route indique que `id` est un paramètre dynamique pouvant prendre une valeur entière. Lorsqu'un utilisateur accède à une URL comme "[localhost:5000/utilisateur/1](http://localhost:5000/utilisateur/1)", le paramètre `id` est transmis à la fonction `profil_utilisateur`, qui affiche "Ceci est la page de profil pour l'utilisateur 1."
 
 Vous pouvez ajouter des sections variables à une URL en marquant ces sections avec `<nom_variable>`. Votre fonction reçoit ensuite `<nom_variable>` en tant qu'argument de mot-clé. Facultativement, vous pouvez utiliser un convertisseur pour spécifier le type de l'argument comme `<convertisseur:nom_variable>` où le convertisseur peut être l'un des suivants :
 
 | Convertisseur | Description |
 |-----------|-------------|
-| `string`  | (par défaut) accepte n'importe quel texte sans barre oblique |
+| `string`  | (par défaut) accepte n'importe quel texte sans slash |
 | `int`     | accepte des entiers positifs |
 | `float`   | accepte des valeurs flottantes positives |
-| `path`    | comme `string` mais accepte également des barres obliques |
-| `UUID`    | accepte des chaînes UUID |
+| `path`    | comme `string` mais accepte également des slashes |
+| `UUID`    | accepte des chaînes de caractères du type `<UUID>` |
+
+
+De plus, nous pouvons avoir des pages avec des paramètres optionnels. C'est-à-dire que le paramètre `id` peut être présent ou non. Voici une autre version de la vue `profil_utilisateur` qui peut gérer les deux cas.
+
+```Python
+@app.route("/utilisateur/")
+@app.route("/utilisateur/<int:id>")
+def profil_utilisateur(id=None):
+    if id is None:
+        return "Ceci est la page de profil par défaut."
+    else:
+        return f"Ceci est la page de profil pour l'utilisateur {id}."
+```
+
+Notez que la signature de la fonction est déclarée comme `profil_utilisateur(id=None)`, où `id=None` est un argument optionnel qui prend la valeur du paramètre `/<int:id>` s'il est présent ; sinon, `id` est défini comme `None`. La vue renvoie ensuite un message différent en fonction de la valeur de `id`.
 
 ### Exercices
 
@@ -136,11 +151,13 @@ Créez une page appelée `num` avec une sous-page n'acceptant que des valeurs en
 
 1
 
+👉 L'accès à [localhost:5000/num/a](http://localhost:5000/num/a) devrait afficher une erreur "Not Found". Cela signifie que le paramètre "a" n'est pas un entier positif.
+
 ##### Conseils
 💡 Utilisez la fonction `str()` pour convertir un `int` en `str` en Python.
 
 ##### Que se passe-t-il ?
-❔ Que se passe-t-il si vous essayez d'accéder à la page [localhost:5000/int](http://localhost:5000/int) ? Pouvez-vous l'expliquer ? Essayez de résoudre cette erreur en ajoutant une deuxième `@app.route("/num")` avec des instructions sur la manière de l'utiliser correctement.
+❔ Que se passe-t-il si vous essayez d'accéder à la page [localhost:5000/num](http://localhost:5000/num) ? Pouvez-vous l'expliquer ? Essayez de résoudre cette erreur en ajoutant une deuxième `@app.route("/num")` avec des instructions sur la manière de l'utiliser correctement.
 
 ##### Erreurs
 🚨 Si votre page affiche un message de **TypeError**, cela signifie probablement que votre vue ne renvoie pas une chaîne de caractères. Essayez de convertir la sortie en chaîne de caractères avant de la renvoyer.

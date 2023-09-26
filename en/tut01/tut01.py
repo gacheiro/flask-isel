@@ -14,8 +14,13 @@ def about():
     return "<b>Flask Tutorial - routes and pages</b>"
 
 
+@app.route("/num")
 @app.route("/num/<int:x>")
-def num(x):
+def num(x=None):
+    if x is None:
+        return ("Please provide an integer number.<br>Ex. usage: "
+                "<a href='http://localhost:5000/num/42'>"
+                "http://localhost:5000/num/42</a>")
     return str(x)
 
 

@@ -47,7 +47,7 @@ The code `tut01.py` is explained as:
 
 2. We create a Flask application instance named `app`.
 
-3. Using the @app.route("/") decorator, we define a route for the root URL ("/"). When a user visits the root URL of your web application, Flask will invoke the home() function.
+3. Using the `@app.route("/")` decorator, we define a route for the root URL ("/"). When a user visits the root URL of your web application, Flask will invoke the `home()` function.
 
 4. Inside the `home()` function, we simply return the string `"Hello, world!"` as the response. This response will be sent back to the client's web browser.
 
@@ -122,6 +122,20 @@ You can add variable sections to a URL by marking sections with `<variable_name>
 | `path`    | like `string` but also accepts slashes |
 | `UUID`    | accepts UUID strings |
 
+In addition, we can have pages with optional parameters. That is, the parameter id may or may not be present. The below another version of the view `user_profile` that can handle both cases.
+
+```Python
+@app.route("/user/")
+@app.route("/user/<int:id>")
+def user_profile(id=None):
+    if id is None:
+        return "This is the default profile page."
+    else:
+        return f"This is the profile page for user {id}."
+```
+
+Note that the function signature is declared as `user_profile(id=None)`, where `id=None` is a keyword argument that takes on the value of the parameter `/<int:id>` if it is present; otherwise, `id` is set to `None`. The view then returns a different message based on the value of `id`.
+
 ### Exercises
 
 <hr>
@@ -136,11 +150,13 @@ Create a page called `num` with a subpage that only accepts integer values such 
 
 1
 
+👉 Accessing [localhost:5000/num/a](http://localhost:5000/num/a) should display a "Not Found" page error. This means that the parameter "a" is not a positive integer.
+
 ##### Tips
 💡 Use the `str()` function to convert an `int` to `str` in Python.
 
 ##### What happens?
-❔ What happens if you try to access the page [localhost:5000/int](http://localhost:5000/int)? Can you explain it? Try to solve this error by adding a second `@app.route("/num")` with instructions on how to use it correctly.
+❔ What happens if you try to access the page [localhost:5000/num](http://localhost:5000/num)? Can you explain it? Try to solve this error by adding a second `@app.route("/num")` with instructions on how to use it correctly.
 
 ##### Errors
 🚨 If your page shows a **TypeError** message, it probably means that your view is not returning a `str`. Try converting the output to `str` before returning it.
