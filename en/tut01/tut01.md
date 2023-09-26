@@ -221,3 +221,45 @@ Create a page called `fat` with an integer subpage **x** that displays the facto
 👉 Accessing [localhost:5000/fat/1000](http://localhost:5000/fat/1000) should display:
 
 1000 is too big
+
+## View return types
+
+In Flask, a view function can return various types of responses. The valid return types include:
+
+1. **String**: You can return a simple string as a response, which will be sent as plain text to the client's browser.
+
+2. **HTML Content**: You can return HTML content as a string, allowing you to generate dynamic web pages.
+
+3. **JSON Data**: You can return a dictionary (or any JSON-serializable data structure) using Flask's `jsonify` function to automatically serialize it as a `JSON` response. This is commonly used for web applications that provide a service in the form of an API, and may not be intended to be accessed via web browsers. JSON responses are widely used for APIs because they are easily consumable by various programming languages and platforms.
+
+```Python
+from flask import Flask, jsonify
+
+
+@app.route("/list")
+def return_list():
+    my_list = [1, 2, 3, 4, 5]
+    return jsonify(my_list)
+
+
+@app.route("/dict")
+def return_dict():
+    my_dict = {"name": "John",
+               "age": 30,
+               "city": "New York"}
+    return jsonify(my_dict)
+```
+
+In the code above, we have two routes, `/list` and `/dict`. The `/list` route returns a list as a JSON response, while the `/dict` route returns a dictionary as a JSON response using Flask's `jsonify` function. This is a common approach for returning structured data in a RESTful API.
+
+### Exercises
+
+1 - Return a proper HTML document
+
+Modify the `hello` view to return a proper HTML document. The HTML document should specify the page title as "Flask Tutorial | Routes and pages," set the page language to English (using the `lang` attribute), and specify text encoding as "utf-8." The body of the page should display "Hello, world!".
+
+#### Tips
+
+💡 Remember that an HTML document is essentially text.
+
+💡 Use triple quotes `"""` to write a multiline string in Python.

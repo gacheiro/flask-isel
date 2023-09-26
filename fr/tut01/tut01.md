@@ -219,3 +219,51 @@ Créez une page appelée `factorielle` avec une sous-page entière **x** qui aff
 👉 L'accès à [localhost:5000/factorielle/1000](http://localhost:5000/factorielle/1000) devrait afficher :
 
 1000 est trop grand
+
+## Types de retours de vues
+
+Dans Flask, une fonction de vue peut renvoyer divers types de réponses. Les types de retour valides comprennent :
+
+1. **Chaîne de caractères** : Vous pouvez renvoyer une chaîne de caractères simple en réponse, qui sera envoyée sous forme de texte brut au navigateur du client.
+
+2. **Contenu HTML** : Vous pouvez renvoyer du contenu HTML sous forme de chaîne de caractères, vous permettant de générer des pages Web dynamiques.
+
+3. **Données JSON** : Vous pouvez renvoyer un dictionnaire (ou toute structure de données sérialisable au format JSON) en utilisant la fonction `jsonify` de Flask pour le sérialiser automatiquement en une réponse au format JSON. Cela est couramment utilisé pour les applications Web qui fournissent un service sous forme d'API et qui ne sont peut-être pas destinées à être consultées via des navigateurs Web. Les réponses JSON sont largement utilisées pour les API car elles sont facilement consommables par divers langages de programmation et plates-formes.
+
+```Python
+from flask import Flask, jsonify
+
+app = Flask(__name__)
+
+
+@app.route("/liste")
+def retourner_liste():
+    ma_liste = [1, 2, 3, 4, 5]
+    return jsonify(ma_liste)
+
+
+@app.route("/dictionnaire")
+def retourner_dictionnaire():
+    mon_dictionnaire = {"nom": "Guillaume",
+                        "âge": 38,
+                        "ville": "Rouen"}
+    return jsonify(mon_dictionnaire)
+
+
+if __name__ == "__main__":
+    app.run(debug=True)
+```
+
+Dans le code ci-dessus, nous avons deux routes, `/liste` et `/dictionnaire`. La route `/liste` renvoie une liste sous forme de réponse JSON, tandis que la route `/dictionnaire` renvoie un dictionnaire sous forme de réponse JSON en utilisant la fonction `jsonify` de Flask. C'est une approche courante pour renvoyer des données structurées dans une API RESTful.
+
+### Exercices
+
+1 - Renvoyer un document HTML structuré
+
+Modifiez la vue `hello` pour renvoyer un document HTML structuré. Le document HTML doit spécifier le titre de la page comme étant "Flask Tutorial | Routes et pages", définir la langue de la page en français (en utilisant l'attribut `lang`) et spécifier l'encodage du texte en "utf-8". Le corps de la page doit afficher "Hello, world !".
+
+#### Conseils
+
+💡 Rappelez-vous qu'un document HTML est essentiellement du texte.
+
+💡 Utilisez des triples guillemets `"""` pour rédiger une chaîne de caractères multiligne en Python.
